@@ -18,7 +18,7 @@ export default function Home() {
           <NewsArticles />
           <div className='relative w-[80%] flex flex-col gap-y-4'>
             <StockCardLong />
-            {/* <ChartWidget /> */}
+            <ChartWidget />
           </div>
         </div>
       </div>
