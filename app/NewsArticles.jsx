@@ -4,7 +4,7 @@ import '../styles'
 import Link from 'next/link'
 
 // always render component dynamically
-export const revalidate = 0
+// export const revalidate = 0
 
 async function getNews(userStocks) {
   let NewsArticles = []
