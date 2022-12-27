@@ -50,11 +50,6 @@ const ChartWidget = () => {
           Light Mode
         </button>
       )}
-
-      {/* Don't mind this error, if async tag is added it breaks production on page refresh */}
-      <html>
-        <script src='https://s3.tradingview.com/tv.js'></script>
-      </html>
     </Fragment>
   )
 }
