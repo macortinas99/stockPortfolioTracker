@@ -10,7 +10,7 @@ import ChartWidget from './ChartWidget'
 export default function Home() {
   return (
     <>
-      <Script src='https://s3.tradingview.com/tv.js' />
+      {/* <Script async src='https://s3.tradingview.com/tv.js' /> */}
 
       <div>
         <Header />
