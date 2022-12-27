@@ -24,7 +24,7 @@ async function getNews(userStocks) {
 }
 
 async function NewsArticles() {
-  let userStocks = ['AAPL', 'META', 'MSFT', 'FSR', 'BA']
+  let userStocks = ['FSR', 'BA']
   const news = await getNews(userStocks)
   // let news = [
   //   {
