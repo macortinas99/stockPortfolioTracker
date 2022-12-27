@@ -52,7 +52,7 @@ const ChartWidget = () => {
       )}
 
       <html>
-        <script async src='https://s3.tradingview.com/tv.js'></script>
+        <script src='https://s3.tradingview.com/tv.js'></script>
       </html>
     </Fragment>
   )
