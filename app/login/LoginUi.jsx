@@ -29,26 +29,6 @@ function LoginUi() {
 
   // Re-route user to dashboard/home page
 
-  // useEffect(() => {
-  //   // event.preventDefault()
-  //   // const verifyEmail = async () => {
-  //   //   let res = await fetch(process.env.NEXT_PUBLIC_API_URL + 'api/users/verify', {
-  //   //     method: 'POST',
-  //   //     headers: {
-  //   //       'Content-Type': 'application/json',
-  //   //     },
-  //   //     body: JSON.stringify(email),
-  //   //   })
-  //   //   let data = await res.json()
-  //   //   // console.log('this should be printing on client')
-  //   //   console.log(data.user)
-  //   //   setUserInfo(data.user)
-  //   // }
-  //   // if (submittedResponse) {
-  //   //   verifyEmail()
-  //   //   console.log('user info', userInfo)
-  //   // }
-  // }, [submittedResponse])
   return (
     <form>
       {submittedResponse && !userInfo && <p>The email you entered does not exists.</p>}

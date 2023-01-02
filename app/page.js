@@ -6,12 +6,12 @@ import StockCardLong from './StockCardLong'
 import Script from 'next/script'
 
 import ChartWidget from './ChartWidget'
+import { SessionProvider } from 'next-auth/react'
 
 export default function Home() {
   return (
     <>
       {/* <Script src='https://s3.tradingview.com/tv.js' /> */}
-
       <div>
         <Header />
         <div className='flex w-[90%] mx-auto gap-x-4'>

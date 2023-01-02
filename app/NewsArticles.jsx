@@ -356,7 +356,7 @@ async function NewsArticles() {
   // ]
   // console.log('news articles combined')
 
-  console.log(news)
+  // console.log(news)
 
   return (
     <div className={styles.articleListContainer}>

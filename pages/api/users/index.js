@@ -1,11 +1,17 @@
-import { createUser, getUsers } from '../../../lib/prisma/users'
+import { unstable_getServerSession } from 'next-auth'
+import { stringify } from 'postcss'
+import { createUser, getUsers, getUserByEmail } from '../../../lib/prisma/users'
 
 const handler = async (req, res) => {
   if (req.method === 'GET') {
     try {
-      const { users, error } = await getUsers()
+      const userSession = await unstable_getServerSession(req, res)
+      const userEmail = userSession.user.email
+      const { user, error } = await getUserByEmail(userEmail)
+      console.log('user', user)
+      const userStocks = stringify(user.stocks)
       if (error) throw new Error(error)
-      return res.status(200).json({ users })
+      return res.status(200).json({ userStocks })
     } catch (error) {
       return res.status(500).json({ error: error.message })
     }
