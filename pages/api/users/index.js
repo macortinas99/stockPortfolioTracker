@@ -6,12 +6,17 @@ const handler = async (req, res) => {
   if (req.method === 'GET') {
     try {
       const userSession = await unstable_getServerSession(req, res)
-      const userEmail = userSession.user.email
-      const { user, error } = await getUserByEmail(userEmail)
-      console.log('user', user)
-      const userStocks = stringify(user.stocks)
-      if (error) throw new Error(error)
-      return res.status(200).json({ userStocks })
+      if (!userSession) {
+        return res.status(200).json('the session doesnt exists')
+      }
+      if (userSession) {
+        console.log('userSession:', userSession)
+        const userEmail = userSession.user.email
+        const user = await getUserByEmail(userEmail)
+        const userStocks = user.user.stocks
+        // console.log(userStocks)
+        return res.status(200).json(userStocks)
+      }
     } catch (error) {
       return res.status(500).json({ error: error.message })
     }

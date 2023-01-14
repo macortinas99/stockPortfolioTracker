@@ -3,10 +3,7 @@ import Image from 'next/image'
 import Header from './Header'
 import NewsArticles from './NewsArticles'
 import StockCardLong from './StockCardLong'
-import Script from 'next/script'
-
 import ChartWidget from './ChartWidget'
-import { SessionProvider } from 'next-auth/react'
 
 export default function Home() {
   return (
@@ -18,6 +15,7 @@ export default function Home() {
           <NewsArticles />
           <div className='relative w-[80%] flex flex-col gap-y-4'>
             <StockCardLong />
+
             <ChartWidget />
           </div>
         </div>

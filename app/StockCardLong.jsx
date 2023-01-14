@@ -1,11 +1,12 @@
-// 'use client'
 import styles from '../styles'
 import '../styles/globals.css'
+import ClientParentGetSession from '../components/ClientParentGetSession'
 
 async function getData() {
-  const userRes = await fetch(process.env.NEXT_PUBLIC_API_URL + 'api/users')
+  const userRes = await fetch(process.env.NEXT_PUBLIC_API_URL + 'api/users', { cache: 'no-store' })
   const userStocks = await userRes.json()
-  console.log('STOCKS:', userStocks)
+  console.log(userStocks)
+  // console.log('STOCKS:', userStocks)
   // let userStocks = ['AAPL', 'MSFT', 'TSLA', 'BA']
   const res = await fetch(`https://api.tiingo.com/iex/?tickers=${userStocks}&token=${process.env.NEXT_PUBLIC_TINGO_API_KEY}`, { cache: 'no-store' })
   const data = await res.json()
@@ -14,7 +15,7 @@ async function getData() {
 
 async function StockCardLong() {
   const data = await getData()
-  // console.log(data)
+  console.log(data)
   // let data = [
   //   {
   //     ticker: 'AAPL',
