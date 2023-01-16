@@ -1,10 +1,21 @@
 import styles from '../styles'
 import '../styles/globals.css'
 import ClientParentGetSession from '../components/ClientParentGetSession'
+import { unstable_getServerSession } from 'next-auth'
 
 async function getData() {
-  const userRes = await fetch(process.env.NEXT_PUBLIC_API_URL + 'api/users', { cache: 'no-store' })
-  const userStocks = await userRes.json()
+  let userSession = await unstable_getServerSession()
+  let userEmail = userSession.user.email
+  const userRes = await fetch(process.env.NEXT_PUBLIC_API_URL + 'api/users/stocks', {
+    cache: 'no-store',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userEmail),
+  })
+  let userStocks = await userRes.json()
+  userStocks = userStocks.userStocks.map(stock => stock.ticker)
   console.log(userStocks)
   // console.log('STOCKS:', userStocks)
   // let userStocks = ['AAPL', 'MSFT', 'TSLA', 'BA']
@@ -14,8 +25,8 @@ async function getData() {
 }
 
 async function StockCardLong() {
-  const data = await getData()
-  console.log(data)
+  const userStocks = await getData()
+  console.log('userStocks: ', userStocks)
   // let data = [
   //   {
   //     ticker: 'AAPL',
@@ -94,7 +105,7 @@ async function StockCardLong() {
   //     prevClose: 257.22,
   //   },
   // ]
-  let userStocks = ['AAPL']
+  // let userStocks = ['AAPL']
   // const { ticker, avgPrice, change, changePercent, volume, avgVol, prevClose, Open } = tickerInfo
   return (
     <div className={styles.portfolioContainer}>
@@ -108,7 +119,7 @@ async function StockCardLong() {
         <p>Open</p>
       </div>
 
-      {data.map(ticker => (
+      {userStocks.map(ticker => (
         <div className={`${styles.portfolioTickerInfo} portfolioInfoColumns`} key={ticker.ticker}>
           <p>{ticker.ticker}</p>
           <p>${ticker.last}</p>

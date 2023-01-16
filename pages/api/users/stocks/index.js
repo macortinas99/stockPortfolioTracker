@@ -1,16 +1,17 @@
-import { createUser, getUsers, getUserByEmail } from '../../../lib/prisma/users'
+import { createUser, getUsers, getUserByEmail } from '../../../../lib/prisma/users'
 
 const handler = async (req, res) => {
-  if (req.method === 'GET') {
-  }
+  // if (req.method === 'GET') {
+  // }
 
   if (req.method === 'POST') {
     try {
       const email = req.body
-      console.log(data)
-      const { user, error } = await getUserByEmail(data)
+      const { user, error } = await getUserByEmail(email)
+      let userStocks = user.stocks
+      // console.log('user:', user.stocks)
       if (error) throw new Error(error)
-      return res.status(200).json({ user })
+      return res.status(200).json({ userStocks })
     } catch (error) {
       return res.status(500).json({ error: error.message })
     }
