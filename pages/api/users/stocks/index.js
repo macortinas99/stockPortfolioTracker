@@ -4,6 +4,7 @@ const handler = async (req, res) => {
   // if (req.method === 'GET') {
   // }
 
+  // Query to DB to get stocks owned by signed in user
   if (req.method === 'POST') {
     try {
       const email = req.body

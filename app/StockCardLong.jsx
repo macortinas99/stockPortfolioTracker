@@ -1,11 +1,9 @@
 import styles from '../styles'
 import '../styles/globals.css'
-import ClientParentGetSession from '../components/ClientParentGetSession'
 import { unstable_getServerSession } from 'next-auth'
 
-async function getData() {
-  let userSession = await unstable_getServerSession()
-  let userEmail = userSession.user.email
+async function getUserInfo(userEmail) {
+  // Post request to API to query MongoDB with email address
   const userRes = await fetch(process.env.NEXT_PUBLIC_API_URL + 'api/users/stocks', {
     cache: 'no-store',
     method: 'POST',
@@ -15,123 +13,87 @@ async function getData() {
     body: JSON.stringify(userEmail),
   })
   let userStocks = await userRes.json()
-  userStocks = userStocks.userStocks.map(stock => stock.ticker)
-  console.log(userStocks)
-  // console.log('STOCKS:', userStocks)
-  // let userStocks = ['AAPL', 'MSFT', 'TSLA', 'BA']
-  const res = await fetch(`https://api.tiingo.com/iex/?tickers=${userStocks}&token=${process.env.NEXT_PUBLIC_TINGO_API_KEY}`, { cache: 'no-store' })
+
+  return userStocks
+}
+
+async function getTickerData(userTickers) {
+  // API call to get stock data for each ticker user owns
+  const res = await fetch(`https://api.tiingo.com/iex/?tickers=${userTickers}&token=${process.env.NEXT_PUBLIC_TINGO_API_KEY}`, { cache: 'no-store' })
   const data = await res.json()
+
   return data
 }
 
 async function StockCardLong() {
-  const userStocks = await getData()
-  console.log('userStocks: ', userStocks)
-  // let data = [
-  //   {
-  //     ticker: 'AAPL',
-  //     timestamp: '2022-12-15T21:00:00+00:00',
-  //     lastSaleTimestamp: '2022-12-15T21:00:00+00:00',
-  //     quoteTimestamp: '2022-12-15T21:00:00+00:00',
-  //     open: 141.11,
-  //     high: 141.8,
-  //     low: 136.025,
-  //     mid: null,
-  //     tngoLast: 136.5,
-  //     last: 136.5,
-  //     lastSize: null,
-  //     bidSize: null,
-  //     bidPrice: null,
-  //     askPrice: null,
-  //     askSize: null,
-  //     volume: 98931907,
-  //     prevClose: 143.21,
-  //   },
-  //   {
-  //     ticker: 'TSLA',
-  //     timestamp: '2022-12-15T21:00:00+00:00',
-  //     lastSaleTimestamp: '2022-12-15T21:00:00+00:00',
-  //     quoteTimestamp: '2022-12-15T21:00:00+00:00',
-  //     open: 153.44,
-  //     high: 160.9299,
-  //     low: 153.28,
-  //     mid: null,
-  //     tngoLast: 157.67,
-  //     last: 157.67,
-  //     lastSize: null,
-  //     bidSize: null,
-  //     bidPrice: null,
-  //     askPrice: null,
-  //     askSize: null,
-  //     volume: 122334459,
-  //     prevClose: 156.8,
-  //   },
-  //   {
-  //     ticker: 'BA',
-  //     timestamp: '2022-12-15T21:00:00+00:00',
-  //     lastSaleTimestamp: '2022-12-15T21:00:00+00:00',
-  //     quoteTimestamp: '2022-12-15T21:00:00+00:00',
-  //     open: 186.25,
-  //     high: 187.975,
-  //     low: 181.2801,
-  //     mid: null,
-  //     tngoLast: 183.72,
-  //     last: 183.72,
-  //     lastSize: null,
-  //     bidSize: null,
-  //     bidPrice: null,
-  //     askPrice: null,
-  //     askSize: null,
-  //     volume: 5347787,
-  //     prevClose: 188.25,
-  //   },
-  //   {
-  //     ticker: 'MSFT',
-  //     timestamp: '2022-12-15T21:00:00+00:00',
-  //     lastSaleTimestamp: '2022-12-15T21:00:00+00:00',
-  //     quoteTimestamp: '2022-12-15T21:00:00+00:00',
-  //     open: 253.72,
-  //     high: 254.2,
-  //     low: 247.34,
-  //     mid: null,
-  //     tngoLast: 249.01,
-  //     last: 249.01,
-  //     lastSize: null,
-  //     bidSize: null,
-  //     bidPrice: null,
-  //     askPrice: null,
-  //     askSize: null,
-  //     volume: 35568093,
-  //     prevClose: 257.22,
-  //   },
-  // ]
-  // let userStocks = ['AAPL']
-  // const { ticker, avgPrice, change, changePercent, volume, avgVol, prevClose, Open } = tickerInfo
-  return (
-    <div className={styles.portfolioContainer}>
-      <div className={`${styles.portfolioHeaderColumns} portfolioInfoColumns`}>
-        <p>Symbol</p>
-        <p>Price (USD)</p>
-        <p>Change</p>
-        <p>Change %</p>
-        <p>Volume (M)</p>
-        <p>Prev Close</p>
-        <p>Open</p>
-      </div>
+  // Get  user email from nextAuth.js session
+  let userSession = await unstable_getServerSession()
+  if (userSession) {
+    let userEmail = userSession.user.email
+    const userStocks = await getUserInfo(userEmail)
+    let userTickers = userStocks.userStocks.map(stock => stock.ticker)
+    userTickers = await getTickerData(userTickers)
 
-      {userStocks.map(ticker => (
-        <div className={`${styles.portfolioTickerInfo} portfolioInfoColumns`} key={ticker.ticker}>
-          <p>{ticker.ticker}</p>
-          <p>${ticker.last}</p>
-          <p>{Math.abs(ticker.prevClose - ticker.open).toFixed(2)}</p>
-          <p>{((Math.abs(ticker.prevClose - ticker.open) / ticker.prevClose) * 100).toFixed(2)}</p>
-          <p>{(ticker.volume / 1000000).toLocaleString(undefined, { style: 'decimal', minimumFractionDigits: 1, maximumFractionDigits: 1 })}M</p>
-          <p>${ticker.prevClose}</p>
-          <p>${ticker.open}</p>
+    return (
+      <div className={styles.portfolioContainer}>
+        <div className={`${styles.portfolioHeaderColumns} portfolioInfoColumns`}>
+          <p>Symbol</p>
+          <p>P/L</p>
+          <p>P/L %</p>
+          <p>Price (USD)</p>
+          <p>Change</p>
+          <p>Change %</p>
+          <p>Volume (M)</p>
+          <p>Prev Close</p>
+          <p>Open</p>
         </div>
-      ))}
-    </div>
-  )
+        {userSession ? (
+          userTickers.map((ticker, index) => {
+            let initialValue = userStocks.userStocks[index].numShares * userStocks.userStocks[index].avgPrice
+            let currentValue = userStocks.userStocks[index].numShares * ticker.last
+            console.log(initialValue)
+            console.log(currentValue)
+            let profitLoss = Math.abs(initialValue - currentValue).toFixed(2)
+            let profitLossPercent = ((Math.abs(initialValue - currentValue) / initialValue) * 100).toFixed(2)
+
+            return (
+              <div className={`${styles.portfolioTickerInfo} portfolioInfoColumns`} key={ticker.ticker}>
+                <p>{ticker.ticker}</p>
+                <p>${profitLoss.toLocaleString()}</p>
+                <p>{profitLossPercent}%</p>
+                <p>${ticker.last}</p>
+                <p>{Math.abs(ticker.prevClose - ticker.open).toFixed(2)}</p>
+                <p>{((Math.abs(ticker.prevClose - ticker.open) / ticker.prevClose) * 100).toFixed(2)}</p>
+                <p>
+                  {(ticker.volume / 1000000).toLocaleString(undefined, { style: 'decimal', minimumFractionDigits: 1, maximumFractionDigits: 1 })}M
+                </p>
+                <p>${ticker.prevClose}</p>
+                <p>${ticker.open}</p>
+              </div>
+            )
+          })
+        ) : (
+          <div>Log in to see your stocks.</div>
+        )}
+      </div>
+    )
+  }
+  if (!userSession) {
+    return (
+      <div className={styles.portfolioContainer}>
+        <div className={`${styles.portfolioHeaderColumns} portfolioInfoColumns`}>
+          <p>Symbol</p>
+          <p>Price (USD)</p>
+          <p>Change</p>
+          <p>Change %</p>
+          <p>Volume (M)</p>
+          <p>Prev Close</p>
+          <p>Open</p>
+        </div>
+        <div>Log in to see your stocks.</div>
+      </div>
+    )
+  }
 }
 
 export default StockCardLong
