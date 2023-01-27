@@ -16,7 +16,7 @@ const styles = {
   portfolioTickerInfo: 'font-Sans-Narrow flex gap-x-16 p-4',
 
   //   News articles section
-  articleListContainer: 'w-[20%] h-[1000px] font-Sans-Narrow bg-primary  border-background overflow-auto',
+  articleListContainer: 'w-[20%] h-[1000px] font-Sans-Narrow bg-primary border-background overflow-auto pb-[50px]',
   articles: 'flex flex-col gap-y-2 ',
   articleList: 'relative w-[90%] drop-shadow-2xl mx-auto border-2 rounded p-2',
   articleTitle: 'text-xl font-semibold',
@@ -34,6 +34,10 @@ const styles = {
   filterResultsContainer: 'w-[90%] relative mx-auto border-2 drop-shadow-2xl',
   filterResultsHeader: 'bg-background2 font-Sans-Narrow',
   filterResultsInfoContainer: '',
+
+  // Registration Page
+  passwordNotMatch: 'text-red-500 font-md',
+  passwordMatch: 'text-green-500 font-md',
 }
 
 export default styles

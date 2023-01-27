@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
 import styles from '../../styles/index'
-import finviz from 'finviz-screener'
 
 async function getData(marketCap) {
   //   console.log(filters)
