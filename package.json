@@ -16,8 +16,8 @@
     "lightweight-charts": "^3.8.0",
     "mongodb": "^4.13.0",
     "mongoose": "^6.8.0",
-    "next": "^13.0.6",
-    "next-auth": "^4.18.8",
+    "next": "^13.4.2",
+    "next-auth": "^4.19.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

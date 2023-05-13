@@ -11,10 +11,11 @@ const styles = {
   // Portfolio section styles
 
   //   Stock card long styles
-  portfolioContainer: ' bg-primary w-[100%]',
+  portfolioContainer: 'bg-primary w-[100%] relative pb-6',
   portfolioHeaderColumns: 'text-background2 font-Sans-Narrow flex gap-x-16 p-4 border-b-2 border-danger',
   portfolioTickerInfo: 'font-Sans-Narrow flex gap-x-16 p-4',
-
+  portfolioAddNewTicker: 'absolute -bottom-4 bg-[#b9b8bf] w-[100%] border-t-2 border-background2 ',
+  portfolioAddNewTickerButton: 'ml-4 mt-[5px] my-2 bg-primary border-1 border-background rounded-lg p-2 hover:scale-105 ',
   //   News articles section
   articleListContainer: 'w-[20%] h-[1000px] font-Sans-Narrow bg-primary border-background overflow-auto pb-[50px]',
   articles: 'flex flex-col gap-y-2 ',

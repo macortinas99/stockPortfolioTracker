@@ -1,6 +1,8 @@
 import styles from '../styles'
 import '../styles/globals.css'
-import { unstable_getServerSession } from 'next-auth'
+import { getServerSession } from 'next-auth'
+import AddNewTickerToDB from './AddNewTickerToDB'
+import DeleteTickerFromDB from './DeleteTickerFromDB'
 
 async function getUserInfo(userEmail) {
   // Post request to API to query MongoDB with email address
@@ -19,19 +21,19 @@ async function getUserInfo(userEmail) {
 
 async function getTickerData(userTickers) {
   // API call to get stock data for each ticker user owns
-  const res = await fetch(`https://api.tiingo.com/iex/?tickers=${userTickers}&token=${process.env.NEXT_PUBLIC_TINGO_API_KEY}`, { cache: 'no-store' })
-  const data = await res.json()
-
+  // const res = await fetch(`https://api.tiingo.com/iex/?tickers=${userTickers}&token=${process.env.NEXT_PUBLIC_TINGO_API_KEY}`, { cache: 'no-store' })
+  // const data = await res.json()
+  const data = ['AAPL']
   return data
 }
 
 async function StockCardLong() {
   // Get  user email from nextAuth.js session
-  let userSession = await unstable_getServerSession()
+  let userSession = await getServerSession()
   if (userSession) {
     let userEmail = userSession.user.email
     const userStocks = await getUserInfo(userEmail)
-    let userTickers = userStocks.userStocks.map(stock => stock.ticker)
+    let userTickers = userStocks.userStocks.map(ticker => ticker.ticker)
     userTickers = await getTickerData(userTickers)
 
     return (
@@ -47,12 +49,11 @@ async function StockCardLong() {
           <p>Prev Close</p>
           <p>Open</p>
         </div>
+        <AddNewTickerToDB userEmail={userEmail} />
         {userSession ? (
           userTickers.map((ticker, index) => {
             let initialValue = userStocks.userStocks[index].numShares * userStocks.userStocks[index].avgPrice
             let currentValue = userStocks.userStocks[index].numShares * ticker.last
-            console.log(initialValue)
-            console.log(currentValue)
             let profitLoss = Math.abs(initialValue - currentValue).toFixed(2)
             let profitLossPercent = ((Math.abs(initialValue - currentValue) / initialValue) * 100).toFixed(2)
 
@@ -69,6 +70,7 @@ async function StockCardLong() {
                 </p>
                 <p>${ticker.prevClose}</p>
                 <p>${ticker.open}</p>
+                <DeleteTickerFromDB />
               </div>
             )
           })

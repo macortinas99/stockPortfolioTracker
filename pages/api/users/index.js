@@ -1,4 +1,4 @@
-import { unstable_getServerSession } from 'next-auth'
+import { getServerSession } from 'next-auth'
 import { stringify } from 'postcss'
 import { createUser, getUsers, getUserByEmail } from '../../../lib/prisma/users'
 

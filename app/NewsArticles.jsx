@@ -1,7 +1,7 @@
 import styles from '../styles/index'
 import '../styles'
 import Link from 'next/link'
-import { unstable_getServerSession } from 'next-auth'
+import { getServerSession } from 'next-auth'
 
 // always render component dynamically??
 export const revalidate = 0
@@ -36,7 +36,8 @@ async function getNews(userEmail) {
 
 async function NewsArticles() {
   // let userStocks = ['FSR', 'BA']
-  let userSession = await unstable_getServerSession()
+  let userSession = await getServerSession()
+
   if (userSession) {
     let userEmail = userSession.user.email
     const news = await getNews(userEmail)

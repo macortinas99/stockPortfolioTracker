@@ -12,6 +12,14 @@ const UserLoggedInHeader = ({ activeItem, handleClick }) => {
   if (status === 'unauthenticated')
     return (
       <>
+        <Link href={'/register'}>
+          <span
+            className={activeItem === 'Account Settings' ? `${styles.navItem} text-secondary` : styles.navItem}
+            onClick={() => handleClick('Account Settings')}
+          >
+            Register
+          </span>
+        </Link>
         <Link href={'/api/auth/signin'}>
           <span
             className={activeItem === 'Account Settings' ? `${styles.navItem} text-secondary` : styles.navItem}

@@ -8,9 +8,10 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  name     String @unique
-  email    String @unique
-  password String
-  stocks   Json
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  firstName    String @unique
+  lastName     String @unique
+  emailAddress String @unique
+  password     String
+  stocks       Json
 }

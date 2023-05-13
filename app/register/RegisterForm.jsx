@@ -1,13 +1,16 @@
 'use client'
 import { useState } from 'react'
 import styles from '../../styles/index'
+import { useRouter } from 'next/navigation'
 
 const RegisterForm = () => {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     emailAddress: '',
     password: '',
+    stocks: [],
   })
   const [confirmPassword, setConfirmPassword] = useState('')
   const [hasPasswordBeenTyped, setHasPasswordBeenTyped] = useState(false)
@@ -31,7 +34,7 @@ const RegisterForm = () => {
   }
 
   const handleRegistration = async () => {
-    console.log(formData)
+    router.push(process.env.NEXT_PUBLIC_API_URL + 'api/auth/signin')
     const res = await fetch(process.env.NEXT_PUBLIC_API_URL + 'api/users/register', {
       cache: 'no-store',
       method: 'POST',
@@ -40,6 +43,7 @@ const RegisterForm = () => {
       },
       body: JSON.stringify(formData),
     })
+    console.log(res.json())
   }
   return (
     <div>
@@ -50,7 +54,7 @@ const RegisterForm = () => {
             <h2 className='mt-6 text-center text-3xl font-bold tracking-tight text-gray-900'>Don't have an account already? Create one below</h2>
             <p className='mt-2 text-center text-sm text-gray-600'>
               Or if you already have an account,{' '}
-              <a href='#' className='font-medium text-indigo-600 hover:text-indigo-500 underline'>
+              <a href='api/auth/signin' className='font-medium text-secondary hover:text-indigo-500 underline'>
                 login here.
               </a>
             </p>
